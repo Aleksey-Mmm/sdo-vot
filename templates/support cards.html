@@ -1,0 +1,131 @@
+{% extends 'base manager.html' %}
+{% load static %}
+{% block title %}Заявки{% endblock %}
+ 
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div id="hide-des-div" class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="{% url 'managementapp:supportcards' %}">Заявки</a></li>
+                </ul>
+            </div>
+            <div class="column50" style="margin-left: auto; margin-right: 0px;">
+                <div style="padding-top: 17px; text-align:  right;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="hide-mob-div" class="topnav">
+            <ul>
+                <li><a href="/">Главная</a></li>
+            </ul>
+            <div id="myLinks">
+                <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">О портале</a>
+                <a href="" style="color: #000; text-decoration: none;">Инструкция обучающегося</a> 
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+            </a>
+        </div> 
+    </nav>
+
+</div>
+<div id="popup_hd">
+    <div id="popup_helpdesk">
+        Контакты технической поддержки<br><br>
+        Электронная почта: support@sdo-vot.ru<br>
+        WhatsApp/Telegram: +7(495) 476-54-88<br><br>
+        <a href="#" class="close">Закрыть окно</a>
+    </div>
+</div>
+<div class="examtest" style="min-height: 440px;">
+    {% if not card %}
+        <h2 style="text-align: center;">Заявки в Тех Поддержку</h2><hr>
+    {% endif %}
+    <div class="row">
+        <div class="column15">
+
+        </div>
+        <div class="column70" style="text-align: center;">
+            {% if not card %}
+                <div style="text-align: left; overflow-y: auto; overflow-x: hidden; max-height: 610px;">
+                    {% for card in object_list reversed %}
+                        {% if "Статус: Готово" in card %}
+                            <div class="card card-3" style="background: radial-gradient(rgb(173, 173, 173), grey);">
+                        {% elif "Непрочитанное сообщение!" in card %}
+                            <div class="card card-3" style="background: radial-gradient(rgb(0, 164, 0), green);">
+                        {% else %}
+                            <div class="card card-3">
+                        {% endif %}
+                                <h2 class="card__title">{% autoescape off %}{{ card }}{% endautoescape %}</h2>
+                                <p class="card__apply">
+                                    <a class="card__link" href="{% url 'managementapp:supportcards' %}?card={{ card|card_get_id }}">Открыть</a>
+                                </p>
+                            </div>                        
+                    {% endfor %}                    
+                </div>
+            {% else %}
+                <form method="post" class="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="column25">
+                            <a href="{% url 'managementapp:supportcards' %}" class="button-white" style="padding: 0;">Назад</a>
+                        </div>
+                        <div class="column50">
+                            <h2 style="margin: 0">Заявка: {{ card }}</h2>
+                        </div>
+                        <div class="column25">
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div style="overflow-y: auto; max-height: 500px;">
+                        {% if comments %}
+                            {% for comment in comments %}
+                                {% if user.get_username in comment  %}
+                                    <div class="row">
+                                        <div class="column50">
+
+                                        </div>
+                                        <div class="column50" style="text-align: right;">
+                                            {% autoescape off %}<p style="margin: 5px 35px; background-color: #e3effd; padding: 15px; border-radius: 12px;">{{ comment }}</p>{% endautoescape %}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="row">
+                                        <div class="column50" style="text-align: left;">
+                                            {% autoescape off %}<p style="margin: 5px 35px; background-color: #f6f6f6; padding: 15px; border-radius: 12px;">{{ comment }}</p>{% endautoescape %}
+                                        </div>
+                                        <div class="column50">
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="column70">
+                            <textarea id="text" name="text" rows="1" cols="50" class="supporttextarea" placeholder="Текст сообщения ..." required></textarea>
+                        </div>
+                        <div class="column30">
+                            <button type="submit" class="button-white" style="padding: 0;" name="form_type" value="send">Отправить</button>   
+                        </div>
+                    </div>
+                </form>
+                <br>
+            {% endif %}
+        </div>
+        <div class="column15">
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

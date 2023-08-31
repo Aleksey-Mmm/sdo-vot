@@ -1,0 +1,156 @@
+{% extends 'base learning.html' %}
+{% block title %}Курс{% endblock %}
+
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div id="hide-des-div" class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="{% url 'learningapp:courselist' %}">Курсы</a></li>
+                    <li>Курс</li>
+                </ul>
+            </div>
+            <div class="column50" style="margin-left: auto; margin-right: 0px;">
+                <div style="padding-top: 17px; text-align:  right;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>
+                    <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Инструкция</p>
+                    </a>                
+                </div>
+            </div>
+        </div>
+        <div id="hide-mob-div" class="topnav">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="{% url 'learningapp:courselist' %}">Курсы</a></li>
+                <li>Курс</li>
+            </ul>
+            <div id="myLinks">
+                <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">О портале</a>
+                <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">Техническая поддержка</a>
+                <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">Инструкция</a> 
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+            </a>
+        </div> 
+    </nav>
+
+</div>
+<div id="popup_hd">
+    <div id="popup_helpdesk"><br>
+        Контакты технической поддержки<br><br>
+        Электронная почта: support@sdo-vot.ru<br>
+        Тел: +7(495) 476-54-88<br><br>
+        <a href="#" class="close">Закрыть окно</a>
+    </div>
+</div>
+<div id="margin-top-15" class="examtest mb-textcenter" style="min-height: 440px;">
+    <div id="rowoff" class="row">
+        <div id="column-off" class="column50">
+            <h2 style="margin-bottom: 10px; margin-top: 0px;">{{ object.full_name }}</h2>
+        </div>
+        <div id="column-off" class="column50 mb-textcenter" style="text-align: right;">
+            <a href="{% url 'learningapp:courselist' %}" class="btn width70" style="width: 70%;">На предыдущую страницу</a> 
+        </div>
+    </div>
+    <div id="hide-mob-div">
+        <br>        
+    </div>
+    <hr>
+    <div id="hide-des-div">
+        <br><br>        
+    </div>
+    <div id="rowoff" class="row">
+        {% if messages %}
+            {% for message in messages %}
+                <p{% if message.tags %} style="color: red; text-align: center;" class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% else %}
+            <div id="hide-des-div">
+                <br><br><br>        
+            </div>
+        {% endif %}
+        <div id="column-off" class="column30">
+            <div id="hide-des-div">
+                <br><br>        
+            </div>
+            <h2>Состав Курса</h2>
+        </div>
+        <div id="column-off" class="column30" style="text-align: center;">
+            <p style="font-weight: bold;">
+                Шаг 1 <a href="#zatemnenie2"><i class='fa fa-question-circle' style='color: #228fdb; font-size: 20px;'></i></a>
+            </p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if object.bank_training %}
+                    <a class="btn width70" href="{% url 'learningapp:learninglist' course_slug %}" style="width: 80%;">Тренинг</a>  
+                {% else %}
+                    <button class="btn width77" type="submit" name="form_type" value="learningtest" style="width: 80%;">Тренинг</button>  
+                {% endif %}
+            </form>
+            <div id="zatemnenie2">
+                <div id="okno">
+                    Тренинг<br><br>
+                    Обучение в режиме тренинга это  метод активного обучения направленный на устранение пробелов знаний <br><br>
+                    <a href="#" class="close">Закрыть окно</a>
+                </div>
+            </div>
+        </div>
+        <div id="column-off" class="column30" style="text-align: center;">
+            <p style="font-weight: bold;">
+                Шаг 2 <a href="#zatemnenie3"><i class='fa fa-question-circle' style='color: #228fdb; font-size: 20px;'></i></a>
+            </p>
+            <a class="btn width70" href="{% url 'learningapp:quizattempts' course_slug %}" style="width: 80%;">Проверка знаний</a>  
+            <div id="zatemnenie3">
+                <div id="okno">
+                    Проверка знаний<br><br>
+                    Аналог тестирования в Ростехнадзоре<br><br><br>
+                    <a href="#" class="close">Закрыть окно</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="hide-des-div">
+        <br><br>        
+    </div>
+    <br>
+    <hr>
+    <div id="rowoff" class="row">
+        <div id="column-off" class="column25">
+            <div id="hide-des-div">
+                <br>        
+            </div>
+            <h2>Дополнительные модули</h2>
+        </div>
+        <div class="column25" style="text-align: center;">
+            {% if register_course.vot and register_course.vot_qty > 0 %}
+            <p style="font-weight: bold;">Вопрос-Ответ</p>
+                <a href="{% url 'learningapp:questionslist' course_slug %}" class="btn width70" style="width: 70%;">Поиск ответов</a> 
+            {% endif %}
+        </div>
+        <div id="column-off" class="column25" style="text-align: center;">
+            {% if lec %}
+                <p style="font-weight: bold;">Лекции и презентации</p>
+                <a href="{% url 'learningapp:lec' course_slug %}" class="btn width70" style="width: 70%;">Перейти к изучению</a>
+            {% endif %}  
+        </div>
+        <div id="column-off" class="column25" style="text-align: center;">
+            {% if npa %}
+                <p style="font-weight: bold;">Библиотека НПА</p>
+                <a href="{% url 'learningapp:npa' course_slug %}" class="btn width70" style="width: 70%;">Просмотреть</a> 
+            {% endif %}
+        </div>
+    </div>
+    <div id="hide-mob-div">
+        <br><br>        
+    </div>
+</div>
+{% endblock %}

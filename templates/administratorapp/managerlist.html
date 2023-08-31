@@ -1,0 +1,175 @@
+{% extends 'base manager.html' %}
+{% block title %}Список пользователей{% endblock %}
+{% load static %}
+{% block content %}
+<br><br>
+
+<div style="padding-left: 15px; padding-right: 15px;">
+<div class="row">
+    <div class="column70">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}<br>
+        <form method="post" class="multipart/form-data" id='add_subs'>
+        {% csrf_token %}
+        <input class="search" name="search" type="text" style="max-width: 30%;" placeholder="Поиск...">
+        <button type="submit" class="button" name="form_type" value="search_btn">Найти</button>
+        <table id="table2" class="text-center" align="center" width="100%">
+            <thead>
+                <tr>
+                    <th style="text-align: center;"><!--<input type="checkbox" name="select-all" id="select-all">--></th>
+                    <th style="text-align: center;">Логин</th>
+                    <th style="text-align: center;">Имя</th>
+                    <th style="text-align: center;">Продавец</th>
+                    <th style="text-align: center;">Пароль</th>
+                    <th style="text-align: center;">Подписки</th>
+                    <th style="text-align: center;">Отключить</th>                    
+                </tr>                
+            </thead>
+            <tbody>
+                {% for obj in object_list %}
+                    <tr>
+                        <td><input type="checkbox" name="checkeduser" value="{{ obj.id }}"></td>
+                        <td>{{ obj.username }}</td>
+                        <td>{{ obj.first_name}}</td> 
+                        <td>
+                            {% for group in obj.groups.all %}
+                                {% if group.name == 'saler' %}
+                                    Это продавец
+                                {% elif group.name != 'manager' %}
+                                    Создал продавец - {{ group }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>                        
+                        <td>{{ obj.extendinguserfields.password }}</td>
+                        <td>
+                            Подписки: {{ obj|qty_sum }} шт.<br>
+                        </td>
+                        <td>
+                            {% if obj.is_active %}
+                                <label class="switch">
+                                    <a href="{% url 'administratorapp:activeuser' obj.id %}">
+                                    <span class="slider-on"></span>
+                                    </a>
+                                </label>
+                            {% else %}
+                                <label class="switch">
+                                    <a href="{% url 'administratorapp:activeuser' obj.id %}">
+                                    <span class="slider-off"></span>
+                                    </a>
+                                </label>
+                            {% endif %}
+                        </td>                        
+                    </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+        <div style="text-align: center;">                        
+            {% if paginator.count > 10 %}
+                <div class="pagination">
+                    {% if page_obj.number > 3 %}
+                        <a href="?page=1">1</a>
+                        {% if page_obj.number > 4 %}
+                            <a href="#" style="pointer-events: none; cursor: default;">...</a>
+                        {% endif %}
+                    {% endif %}
+    
+                    {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <a href="?page={{ p }}" class="active">{{ p }}</a>
+                        {% elif p > page_obj.number|add:'-3' and p < page_obj.number|add:'3' %}
+                            {% if p in checked_page %}
+                                <a style="color: black; background-color: #E7E6E7;" href="?page={{ p }}">{{ p }}</a>
+                            {% else %}
+                                <a href="?page={{ p }}">{{ p }}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+    
+                    {% if page_obj.number < paginator.num_pages|add:'-3' %}
+                        <a href="#" style="pointer-events: none; cursor: default;">...</a>
+                        {% if paginator.num_pages in checked_page %}
+                            <a style="color: black; background-color: #E7E6E7;" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% else %}
+                            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% endif %}
+                    {% elif page_obj.number < paginator.num_pages|add:'-2' %}
+                        {% if paginator.num_pages in checked_page %}
+                            <a style="color: black; background-color: #E7E6E7;" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% else %}
+                            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="pagination">
+                    {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <a href="?page={{ p }}" class="active">{{ p }}</a>
+                        {% else %}
+                            <a href="?page={{ p }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="column30">
+            <div style="text-align: center;">
+                <p>Отчет</p>
+                <label for="start">С:</label>
+                <input type="date" id="start" name="start" value=""><br><br>
+                <label for="start">По:</label>
+                <input type="date" id="end" name="end" value=""><br><br>
+                <input type="checkbox" name="check_all" id="all" value="all"><label for="all">Все Пользователи</label><br><br>
+                <button type="submit" name="form_type" value="report" class="button-white">Скачать</button>
+            </div>
+            <hr>
+            <div style="text-align: center;">
+                <p>Добавить Подписки</p>
+                <input class="input-white" type="text" placeholder="" name="trening" id="trening"><br><br>
+                <!-- <input class="input-white" type="text" placeholder="Тренинг" name="trening" id="trening"><br><br>
+                <input class="input-white" type="text" placeholder="Тренинг ВОТ" name="treningvot" id="treningvot"><br><br>
+                <input class="input-white" type="text" placeholder="Прочие" name="other" id="other"><br><br> -->
+                <button type="submit" name="form_type" value="add_subs" class="button-white">Добавить</button>
+            </div>
+        </form>
+        <hr>
+        <form method="post" class="multipart/form-data" id='add_manager'>
+            {% csrf_token %}
+            <div style="text-align: center;">
+                <p>Добавить Менеджера</p>
+                <input class="input-white" type="text" placeholder="Логин" name="username" id="username"><br><br>
+                <input class="input-white" type="text" placeholder="Органицация" name="first_name" id="first_name"><br><br>
+                <input class="input-white" type="text" placeholder="Почта" name="email" id="email"><br><br>
+                <input type="checkbox" name="saler" id="saler" value="saler"><label for="saler">Продавец</label><br><br>
+                <button type="submit" name="form_type" value="add_manager" class="button-white">Создать Менеджера</button>
+            </div>
+        </form>
+        <hr>
+        <form method="post" class="multipart/form-data" id='add_demo'>
+            {% csrf_token %}
+            <div style="text-align: center;">
+                <p>Добавить Демо</p>
+                <input class="input-white" type="text" placeholder="Кол-во" name="qty" id="qty"><br><br>
+                <button type="submit" name="form_type" value="add_demo" class="button-white">Добавить</button>
+            </div>
+        </form>
+        <form method="post" class="multipart/form-data" id='update_attempt'>
+            {% csrf_token %}
+            <div style="text-align: center;">
+                <p>Обновить Тренинг</p>
+                <input class="input-white" type="text" placeholder="№ Тренинга" name="num" id="num"><br><br>
+                <button type="submit" name="form_type" value="update_attempt" class="button-white">Обновить</button>
+            </div>
+        </form>
+        <hr>        
+    </div>
+</div>    
+</div>
+
+{% endblock %}

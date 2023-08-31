@@ -1,0 +1,211 @@
+{% extends 'base learning2.html' %}
+{% block title %}ШГИ{% endblock %}
+{% load static %}
+
+{% block content %}
+<nav style="background: #e9ebee;" class="bootcontainer">
+    <div id="hide-des-div" class="row">
+        <div class="column50">
+            <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0;">
+                <li style="color: #e9ebee;">Домашняя</li>
+            </ul>
+        </div>
+        <div class="column50" style="margin-left: auto; margin-right: 0px;">
+            <div style="padding-top: 17px; text-align:  right;">
+                <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 17px;">О портале</p>
+                </a>
+                <!-- <a href="#popup_hd" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                </a>
+                <a href="" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 15px;">Инструкция обучающегося</p>
+                </a>                 -->
+            </div>
+        </div>
+    </div>
+    <div id="hide-mob-div" class="topnav">
+        <ul>
+            <li style="color: #e9ebee;">Домашняя</li>
+        </ul>
+        <div id="myLinks">
+            <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">О портале</a>
+            <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">Техническая поддержка</a>
+            <a href="" style="color: #000; text-decoration: none;">Инструкция обучающегося</a> 
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+        </a>
+    </div> 
+</nav>
+<div id="popup_hd">
+    <div id="popup_helpdesk"><br>
+        Контакты технической поддержки<br><br>
+        Электронная почта: support@sdo-vot.ru<br>
+        Тел: +7(495) 476-54-88<br><br>
+        <a href="#" class="close">Закрыть окно</a>
+    </div>
+</div>
+<div id="margin-top-15" class="bootcontainer15">
+    <div id="rowoff" class="row">
+        <div id="column-off" class="column30">
+            <div class="boxelement">               
+                <h4 style="text-align: center;">Перечень курсов</h4>
+                <div id="hide-des-div">
+                    <hr>        
+                </div>                
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Промышленная безопасность.pdf" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Промышленная безопасность</p>
+                        </a>
+                    </div>
+                </div><br><br>
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Энергобезопасность.pdf" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Энергобезопасность</p>
+                        </a>
+                    </div>
+                </div><br><br>
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Прочие курсы.pdf" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Прочие</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="column-off" class="column30">
+            <div class="boxelement">
+                <div id="hide-mob-div">
+                    <br><hr>        
+                </div> 
+                <h4 style="text-align: center;">Информация</h4>
+                <div id="hide-des-div">
+                    <hr>        
+                </div>
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Обновления.pdf" style="color: #000; text-decoration: none;">
+                        <!-- <a href="#popup_update" style="color: #000; text-decoration: none;"> -->
+                            <p style="margin-top: 8px;">Информация об обновлении</p>
+                        </a>
+                        <!-- <div id="popup_update">
+                            <div id="popup_win_update"><br><br>
+                                По состоянию на 26.05.2022
+                                все курсы актуализированы и соответствуют перечням вопросов размещенным на сайте Ростехнадзора.
+                                С перечнем вопросов Вы можете ознакомиться перейдя по ссылке на сайте <a href="https://www.gosnadzor.ru/service/list/Safety%20certification/voprosi%20testirovaniya/index.php">Ростехнадзора</a>.<br><br>
+                                <a href="#" class="close">Закрыть окно</a>
+                            </div>
+                        </div> -->
+                    </div>
+                </div><br><br>
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="#popup_sl" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Отдел продаж</p>
+                        </a>
+                        <div id="popup_sl">
+                            <div id="popup_sales">
+                                <p style="font-weight: bold;">Отдел продаж:</p>
+
+                                Приемная тел. +7 495 240 53 25, эл.почта: sale-vot@sdo-vot.ru<br><br>
+
+                                <p style="font-weight: bold;">Отдел продаж Учебные центры:</p>
+
+                                Менеджер УЦ   тел.   +7-495-320-32-88, эл.почта: zln@sdo-vot.ru<br><br>
+
+                                <p style="font-weight: bold;">Отдел продаж Организации эксплуатирующие ОПО:</p>
+
+                                тел. +7-495-320-88-08, эл. почта: baa@sdo-vot.ru<br>
+
+                                тел. +7(495) 255-57-79, эл. почта: vtn@sdo-vot.ru<br>
+
+                                тел. +7 (495) 125 02 32, эл. почта: nda@sdo-vot.ru<br><br>
+                                
+                                <!-- Уважаемы клиенты мы готовы ответить на Ваши вопросы<br><br>
+                                Эл. почта: sale-ept@sdo-vot.ru<br>
+                                Телефон: +7 495 320 88 08<br>
+                                Приемная: +7 495 240 53 25<br><br> -->
+                                
+                                <a href="#" class="close">Закрыть окно</a>
+                            </div>
+                        </div>
+                    </div>
+                </div><br><br>
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div> 
+                    <div class="column80">
+                        <!-- <a href="#popup_hd" style="color: #000; text-decoration: none;"><p>Техническая поддержка</p></a> -->
+                        <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;"><p>Техническая поддержка</p></a>
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <div id="column-off" class="column30">
+            <div class="boxelement">
+                <div id="hide-mob-div">
+                    <br><hr>        
+                </div> 
+                <h4 style="text-align: center;">Инструкции</h4>
+                <div id="hide-des-div">
+                    <hr>        
+                </div>
+                <!-- <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Инструкция Администратора.pdf" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Инструкция администратора</p>
+                        </a>
+                    </div>
+                </div><br><br> -->
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Инструкция обучающегося</p>
+                        </a>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="column20" style="text-align: center;">
+                        <img style="width: 3em;" src="{% static 'examapp/css/file-earmark-text.svg' %}">
+                    </div>
+                    <div class="column80">
+                        <a href="/media/Памятка по тренингу.pdf" style="color: #000; text-decoration: none;">
+                            <p style="margin-top: 8px;">Памятка по тренингу</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="hide-mob-div">
+    <br><br><br>        
+</div>
+{% endblock %}

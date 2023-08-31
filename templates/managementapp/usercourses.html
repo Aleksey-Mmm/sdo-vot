@@ -1,0 +1,199 @@
+{% extends 'base manager.html' %}
+{% block title %}Запись на курсы{% endblock %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="{% url 'managementapp:users' %}">Пользователи</a></li>
+                    <li>Курсы</li>
+                </ul>
+            </div>
+            <div class="column50" style="text-align: right;">
+                <div style="padding-top: 17px;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>          
+                </div>
+            </div>
+        </div>
+    </nav>
+</div><br>
+<div class="bootcontainer15">
+    <div class="row">
+        <div class="column25">
+            <div class="box">
+                <p>Доступные подписки: {{ request.user|qty_sum }} шт.</p>
+                <p style="padding-right: 10px;">Использовано подписок в текущем месяце: {{ request.user|qty_month_sum }} шт.</p>
+            </div>
+        </div>
+        <div class="column25" style="padding-left: 15px;">
+            <p>Обучающийся: {{ curr_user.last_name }} {{ curr_user.first_name }} {{ curr_user.extendinguserfields.middle_name }}</p>
+            <p>Организация: {{ curr_user.extendinguserfields.department }}</p>
+            <p>Электронная почта: {{ curr_user.email }}</p>
+        </div>
+        <div class="column25">
+
+        </div>
+        <div class="column25">
+        
+        </div>
+    </div><br><br>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}<br>
+    <form method="post" class="multipart/form-data">
+        {% csrf_token %} 
+        <div class="row">
+            <div class="column15" align="center">
+                <!-- <a style="max-width: 75%;" class="button" href="{% url 'managementapp:addcourse' user_id %}">Записать на курс</a> -->
+                <button type="button" class="button" name="form_type" value="edituser" style="padding-left: 10px; padding-right: 10px;" onclick="location.href='{% url 'managementapp:addcourse' user_id %}';">Записать на курс</button>
+            </div>
+            <div class="column15" align="center">
+                <button type="submit" class="button" name="form_type" value="edituser" style="padding-left: 10px; padding-right: 10px;">Ред. пользователя</button>
+            </div>
+            <div class="column15" align="center">
+                <button type="submit" class="button" name="form_type" value="senduser" style="padding-left: 10px; padding-right: 10px;">Отправить пароль <i class='fa fa-question-circle' title="Выберете одного или нескольких пользователей и нажмите кнопку 'Отправить пароли', В результате выбранным пользователям будет направлено приглашение для подготовки в Школе главного инженера, в письме пользователю будут указаны ссылка для перехода в систему подготовки, а также логин и пароль пользователя" style='color: white; font-size: 20px;'></i></button>           
+            </div>
+            <div class="column55" align="center">
+
+            </div>
+        </div>
+    </form>
+    <br>
+    <div>
+        <table id="table2" class="text-center" align="center" width="100%">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Курс</th>
+                    <th style="text-align: center;">Модуль "вопрос-ответ"</th>
+                    <th style="text-align: center;">Активировать</th>
+                    <th style="text-align: center;">Дата активации</th>
+                    <th style="text-align: center;">Дата закрытия</th>
+                    <th style="text-align: center;">Статистика</th>
+                    <th style="text-align: center;">Удалить</th>                    
+                </tr>                
+            </thead>
+            <tbody>
+                {% for obj in object_list %}
+                    <tr>
+                        <td>{{ obj.course.full_name }}</td>
+                        <td>
+                            {% if obj.vot %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                                </svg>
+                            {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"/>
+                                </svg>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if obj.status == None %}
+                                <form action="{% url 'managementapp:activecourse' user_id obj.course.id %}" onsubmit="activeCourse(this);return false;">
+                                    <label class="switch">
+                                        <button>
+                                            <span class="slider-none"></span>   
+                                        </button>
+                                    </label>                            
+                                </form>
+                            {% elif obj.course.id|check_course_end:user_id %}
+                                <label class="switch">
+                                    <span class="slider-on"></span>
+                                </label>
+                            {% else %}
+                                <form action="{% url 'managementapp:activecourse' user_id obj.course.id %}" onsubmit="extendCourse(this);return false;">
+                                    <label class="switch">
+                                        <button>
+                                            <span class="slider-off"></span>   
+                                        </button>
+                                    </label>                            
+                                </form>
+                            {% endif %}
+
+                        </td>
+                        <td>{{ obj.timeactive|date:"d.m.Y" }}</td>
+                        <td>{{ obj.timefinish|date:"d.m.Y" }}</td>
+                        <td>
+                            {% if obj.status != None %}
+                                <a href="{% url 'managementapp:statistics' user_id obj.course.id %}">Статистика по курсу</a>
+                            {% endif %}
+                            {% if obj.course|check_attempt_exist:curr_user %}
+                                <br><br>
+                                <a href="{% url 'managementapp:bestreport' user_id obj.course.id %}">Результат лучшего теста</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if obj.status == None %}
+                                <a href="{% url 'managementapp:deletecourse' user_id obj.course.id %}">удалить</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+        <div style="text-align: center;">                        
+            {% if paginator.count > 10 %}
+                <div class="pagination">
+                    {% if page_obj.number > 3 %}
+                        <a href="?page=1">1</a>
+                        {% if page_obj.number > 4 %}
+                            <a href="#" style="pointer-events: none; cursor: default;">...</a>
+                        {% endif %}
+                    {% endif %}
+    
+                    {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <a href="?page={{ p }}" class="active">{{ p }}</a>
+                        {% elif p > page_obj.number|add:'-3' and p < page_obj.number|add:'3' %}
+                            {% if p in checked_page %}
+                                <a style="color: black; background-color: #E7E6E7;" href="?page={{ p }}">{{ p }}</a>
+                            {% else %}
+                                <a href="?page={{ p }}">{{ p }}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+    
+                    {% if page_obj.number < paginator.num_pages|add:'-3' %}
+                        <a href="#" style="pointer-events: none; cursor: default;">...</a>
+                        {% if paginator.num_pages in checked_page %}
+                            <a style="color: black; background-color: #E7E6E7;" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% else %}
+                            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% endif %}
+                    {% elif page_obj.number < paginator.num_pages|add:'-2' %}
+                        {% if paginator.num_pages in checked_page %}
+                            <a style="color: black; background-color: #E7E6E7;" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% else %}
+                            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="pagination">
+                    {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <a href="?page={{ p }}" class="active">{{ p }}</a>
+                        {% else %}
+                            <a href="?page={{ p }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'managementapp/js/extendcourse.js'%}"></script>
+{% endblock %}

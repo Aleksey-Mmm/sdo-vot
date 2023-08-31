@@ -1,0 +1,239 @@
+{% extends 'base quiz.html' %}
+{% block title %}Тренинг{% endblock %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'learningapp/css/style.css' %}">
+    <div id="hide-des-div">
+        <br><br><br>        
+    </div>
+    <div id="rowoff" class="row">
+        <div id="column-off" class="column20">
+            <div id="hide-des-div" class="question_list">
+                <p style="margin-top: 0px;">Навигация по обучению:</p>
+                <form method="POST" class="multipart/form-data">
+                    {% csrf_token %} 
+                    {% for question in question_list %}
+                        {% if question.coefficient == None %}
+                            <button type="submit" class="question_list_button" style="background-color: #dbdbdb;" name="form_type" value="question_{{ question.question__id }}" disabled>{{ forloop.counter }}</button>
+                        {% else %}
+                            {% if question.coefficient >= 31 %}
+                                <button type="submit" class="question_list_button" style="background-color: limegreen;" name="form_type" value="question_{{ question.question__id }}">{{ forloop.counter }}</button>
+                            {% elif question.coefficient >= 11 and question.coefficient <= 30 %}
+                                <button type="submit" class="question_list_button" style="background-color: lightyellow;" name="form_type" value="question_{{ question.question__id }}">{{ forloop.counter }}</button>
+                            {% elif question.sequence_false > question.sequence_true|sum_qty:question.qty_true_answer %}
+                                <button type="submit" class="question_list_button" style="background-color: lightcoral;" name="form_type" value="question_{{ question.question__id }}">{{ forloop.counter }}</button>
+                            {% else %}
+                                <button type="submit" class="question_list_button" name="form_type" value="question_{{ question.question__id }}">{{ forloop.counter }}</button>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}                    
+                </form>
+            </div>
+            <div id="hide-des-div" class="question_list" style="height: auto; overflow: visible;">
+                <button class="question_list_button" style="color: #F5F7FC;">1</button> - Просмотренный вопрос<br>    
+                <button class="question_list_button" style="background-color: lightyellow; color: lightyellow;">1</button> - Больше верных отв.<br>
+                <button class="question_list_button" style="background-color: lightcoral; color: lightcoral;">1</button> - Больше не верных отв.<br>
+                <button class="question_list_button" style="background-color: limegreen; color: limegreen;">1</button> - Выученный вопрос
+            </div>
+        </div>
+        <div id="column-off" class="column60">
+            <div id="margin-top-15" class="learningtest">
+                <a href="{% url 'learningapp:selectcourse' course_slug %}" style="text-align: right; float: right;">Вернуться в курс</a><br>
+                <div style="display: flex">
+                <h3 style="margin-bottom: 15px;">
+                    {{ quiz }}
+                </h3>
+                </div> 
+                <div class="row">
+                    <div class="column49">
+                        <label style="font-size: 0.75rem;">Процент просмотренных вопросов</label>
+                        <div class="animated-progress progress-blue" title="Процент просмотренных вопросов">
+                            <span style="width: {{ quiz_slug|percent_learningtest:request.user }}%; text-align: center;">{{ quiz_slug|percent_learningtest:request.user }}%</span>
+                        </div> 
+                    </div>
+                    <div class="column2">
+
+                    </div>
+                    <div class="column49">
+                        <label style="font-size: 0.75rem;">Вероятность сдачи теста</label>
+                        <div class="animated-progress 
+                        {% if quiz.course|get_percent:request.user < 80 %}
+                            progress-red
+                        {% else %}
+                            progress-green
+                        {% endif %}
+                        " title="Вероятность сдачи теста">
+                            <span style="width: {{ quiz.course|get_percent:request.user }}%; text-align: center;">{{ quiz.course|get_percent:request.user }}%</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <form method="POST" class="multipart/form-data">
+                        <div class="margin-bottom-20" style="font-size:120%; margin-bottom:50px;">
+                            <b>{{ object.text }}</b>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p{% if message.tags %} style="color: red;" class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}  
+                        </div>
+                        {% csrf_token %} 
+                        <div class="">
+                            {% if check_answer == None %}
+                                {% for a in object.answer_set.all|shuffle %}
+                                    {% if a.id in answers_options %}
+                                        <div class="answer">
+                                            <label class="container" for="{{ a.id }}">
+                                                {% if "base64" in a.text %}
+                                                    {{ a.text|decodeDesignImage }}
+                                                {% else %}
+                                                    {{ a.text }}
+                                                {% endif %}
+                                                <input class="" type="checkbox" id="{{ a.id }}" name="answeroption" value="{{ a.id }}" checked>
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    {% else %}
+                                        <div class="answer">
+                                            <label class="container" for="{{ a.id }}">
+                                                {% if "base64" in a.text %}
+                                                    {{ a.text|decodeDesignImage }}
+                                                {% else %}
+                                                    {{ a.text }}
+                                                {% endif %}
+                                                <input class="" type="checkbox" id="{{ a.id }}" name="answeroption" value="{{ a.id }}">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for a in object.answer_set.all %}
+                                    {% if a.weight != 0 %}
+                                        {% if a.id in check_answer %}
+                                            <div class="answer">
+                                                <label style="color: green; font-weight: bold;" class="container" for="{{ a.id }}">
+                                                    {% if "base64" in a.text %}
+                                                        {{ a.text|decodeDesignImage }}
+                                                    {% else %}
+                                                        {{ a.text }}
+                                                    {% endif %}
+                                                    <input  class="" type="checkbox" id="{{ a.id }}" name="answeroption" disabled="disabled" value="{{ a.id }}" checked>
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        {% else %}
+                                            <div class="answer">
+                                                <label style="color: green; font-weight: bold;" class="container" for="{{ a.id }}">
+                                                    {% if "base64" in a.text %}
+                                                        {{ a.text|decodeDesignImage }}
+                                                    {% else %}
+                                                        {{ a.text }}
+                                                    {% endif %}
+                                                    <input class="" type="checkbox" id="{{ a.id }}" name="answeroption" disabled="disabled" value="{{ a.id }}">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if a.id in check_answer %}
+                                            <div class="answer">
+                                                <label style="color: red; font-weight: bold;" class="container" for="{{ a.id }}">
+                                                    {% if "base64" in a.text %}
+                                                        {{ a.text|decodeDesignImage }}
+                                                    {% else %}
+                                                        {{ a.text }}
+                                                    {% endif %}
+                                                    <input class="" type="checkbox" id="{{ a.id }}" name="answeroption" disabled="disabled" value="{{ a.id }}" checked>
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        {% else %}
+                                            <div class="answer">
+                                                <label class="container" for="{{ a.id }}">
+                                                    {% if "base64" in a.text %}
+                                                        {{ a.text|decodeDesignImage }}
+                                                    {% else %}
+                                                        {{ a.text }}
+                                                    {% endif %}
+                                                    <input class="" type="checkbox" id="{{ a.id }}" name="answeroption" disabled="disabled" value="{{ a.id }}">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div><br>
+                        <hr style="border-top: 1px">
+                            {% if check_answer != None %}
+                                    {% if object.document != None %}
+                                        <div class="answerdocument">
+                                            <p style="font-weight: bold;">{{ object.document }}</p>
+                                            {% if object.explanation != None %}
+                                                <p>
+                                                    {% if "base64" in object.explanation %}
+                                                        {{ object.explanation|decodeDesignImage }}
+                                                    {% else %}
+                                                        {{ object.explanation }}
+                                                    {% endif %}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                        <hr style="border-top: 1px">
+                                    {% else %}
+                                        {% if object.explanation != None %}
+                                            <div class="answerdocument">
+                                                <p style="font-weight: bold;"></p>    
+                                                    <p>
+                                                        {% if "base64" in object.explanation %}
+                                                            {{ object.explanation|decodeDesignImage }}
+                                                        {% else %}
+                                                            {{ object.explanation }}
+                                                        {% endif %}
+                                                    </p>
+                                            </div>
+                                            <hr style="border-top: 1px">        
+                                        {% endif %}
+                                    {% endif %}
+                            {% endif %}
+                        <div class="row">
+                            <div class="column30">
+                                <div class="mb-textcenter">
+                                    {% if check_answer == None %}
+                                        <button type="submit" class="button" name="form_type" value="next">Ответить</button>
+                                    {% else %}
+                                        <button type="submit" class="button" name="form_type" value="next">Следующий вопрос</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="column70">
+                                <div id="hide-des-div" style="padding-top: 6px;">
+                                    Выберите правильный(ые) ответ(ы) на вопрос и нажмите кнопку "Ответить". После этого ответ будет сохранен.
+                                </div> 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="column-off" class="column20">
+
+        </div>
+    </div>
+    <div id="hide-des-div">
+        <br><br>       
+    </div>
+    <br>
+    <style>
+        body { 
+            -ms-user-select: none; 
+            -moz-user-select: none; 
+            -webkit-user-select: none; 
+            user-select: none; 
+        }
+    </style>
+    <script src="{% static 'learningapp/js/back.js' %}"></script>
+{% endblock %}

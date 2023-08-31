@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="{% static 'examapp/css/style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'media/icon.ico' %}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <script src='https://www.google.com/recaptcha/api.js?render=6LfkYW0eAAAAAExou1PUJwUC6XT7nv1ecjk_x-hl'></script>
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div class="bootcontainer header">
+            <div class="row" style="padding-top: 30px;">
+                <div class="column60">
+                    <a href="{% url 'managementapp:home' %}" style="color: #fff; text-decoration: none;">
+                        <p style="margin: 0 0 70px 0;">Школа<br>главного<br>инженера</p>
+                    </a>
+                </div>
+                <div class="column40" style="margin: 0px 15px 0 0px; text-align: right;">
+                    {% if request.user.is_authenticated %}
+                        <a style="color: white;" href="{% url 'managementapp:lk' %}">{{ user.first_name }} {{ user.last_name }}</a> | <a style="color: white;" href="{% url 'managementapp:logout' %}">Выйти</a>
+                    {% else %}
+                        <a style="color: white;" href="{% url 'managementapp:login' %}">Войти</a>
+                    {% endif %}                 
+                </div>                
+            </div>
+        </div>
+        <div class="header2">
+            <div class="bootcontainer" style="padding-top: 25px;">
+                <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 17px; margin-top: 0px; margin-bottom: 0px;">О портале</p>
+                </a>
+                <a href="" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 15px; margin-top: 0px; margin-bottom: 0px;">Техническая поддержка</p>
+                </a>
+                <a href="/media/Инструкция_Пользователя_Слушателя.pdf" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 15px; margin-top: 0px; margin-bottom: 0px;">Инструкция обучающегося</p>
+                </a>
+            </div>
+        </div>
+    </header>
+    <main style="margin-bottom: 10%">
+        <div>
+        {% block content %}{% endblock %} 
+        </div>
+    </main>
+    <footer id="footer">
+        <div class="bootcontainer">
+            <div class="row">
+                <div class="column25">
+                    <div class="row" style="padding-top: 15px;">
+                        <div class="column30">
+                            <img src="{% static 'examapp/css/resources/img/favicon_exam.png' %}" style="width: 50%;">
+                        </div>
+                        <div class="column70">
+                            <a href="https://www.gosnadzor.ru" style="color: #000; text-decoration: none;">
+                                <p>Роcтехнадзор</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column25">
+                    <div class="row">
+                        <div class="column30" style="padding-top: 15px;">
+                            <img src="{% static 'examapp/css/resources/img/shgi.png' %}" style="width: 95%;">
+                        </div>
+                        <div class="column70" style="padding-top: 7px;">
+                            <a href="https://sdovot.ru/" style="color: #000; text-decoration: none;">
+                                <p>Школа главного инженера</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column25">
+                    <div class="row">
+                        <div class="column30" style="padding-top: 15px;">
+                            <img src="{% static 'examapp/css/resources/img/mintrud_logo.jpg' %}" style="width: 50%;">
+                        </div>
+                        <div class="column70" style="padding-top: 7px;">
+                            <a href="https://mintrud.gov.ru" style="color: #000; text-decoration: none;">
+                                <p>Министерство труда и социальной защиты</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column25">
+                    <div class="row">
+                        <div class="column30" style="padding-top: 15px;">
+                            <img src="{% static 'examapp/css/resources/img/gov-4.png' %}" style="width: 70%;">
+                        </div>
+                        <div class="column70">
+                            <a href="http://pravo.gov.ru" style="color: #000; text-decoration: none;">
+                                <p>Официальный интернет-портал правовой информации</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </footer>
+</body>
+</html>

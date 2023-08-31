@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="{% static 'managementapp/css/style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="/media/icon.ico">
+    {% comment %} <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'> {% endcomment %}
+    <script src='https://www.google.com/recaptcha/api.js?render=6LfkYW0eAAAAAExou1PUJwUC6XT7nv1ecjk_x-hl'></script>
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div class="bootcontainer header">
+            <div class="row">
+                <div class="column30" style="padding-top: 17px; padding-left: 13px;">
+                    <a href="/" style="color: #fff; text-decoration: none;">
+                        <img id="pic-em" src="{% static 'managementapp/css/шги.png' %}" style="max-width: 13em;">
+                        <!-- <img id="pic-em" src="{% static 'managementapp/css/exp.png' %}" style="height: 20%;"> -->
+                    </a>
+                </div>
+                <div class="column70" style="text-align: right; padding-top: 20px;">
+                    {% if request.user.is_authenticated %}
+                        {% if request.user|check_kaiten_messages %}
+                            <div class="row">
+                                <div class="column60"></div>
+                                <div class="column5" style="padding-right: 5px;">
+                                    <a href="{% url 'managementapp:support' %}">
+                                        <img src="{% static 'managementapp/pic/support.png' %}" style="width: 3em;">
+                                    </a>
+                                </div>
+                                <div class="column20" style="text-align: left;">
+                                    <p style="margin-top: 7px; margin-bottom: 0px;">+7(495) 476-54-88</p>
+                                    <p style="margin-top: 0px;">support@sdo-vot.ru</p>
+                                </div>
+                                <div class="column5" style="padding-left: 20px;">
+                                    <div class="dropdown">
+                                        <img class="dropbtn" src="{% static 'managementapp/pic/lkdot.png' %}" style="width: 3em;">
+                                        <div class="dropdown-content" style="text-align: left;">
+                                            <p style="color: black; padding-left: 16px;">{{ user.first_name }} {{ user.last_name }}:</p>
+                                            <a href="{{ user|check_home_page }}">Личный кабинет</a>
+                                            <a href="{% url 'managementapp:supportcards' %}">Мои Заявки в ТП<label style="font-size: 10px;">&#128308;</label></a>
+                                            <a href="{% url 'managementapp:logout' %}">Выход</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                <div class="column60"></div>
+                                <div class="column5" style="padding-right: 5px;">
+                                    <a href="{% url 'managementapp:support' %}">
+                                        <img src="{% static 'managementapp/pic/support.png' %}" style="width: 3em;">
+                                    </a>
+                                </div>
+                                <div class="column20" style="text-align: left;">
+                                    <p style="margin-top: 7px; margin-bottom: 0px;">+7(495) 476-54-88</p>
+                                    <p style="margin-top: 0px;">support@sdo-vot.ru</p>
+                                </div>
+                                <div class="column5" style="padding-left: 20px;">
+                                    <div class="dropdown">
+                                        <img class="dropbtn" src="{% static 'managementapp/pic/lk.png' %}" style="width: 3em;">
+                                        <div class="dropdown-content" style="text-align: left;">
+                                            <p style="color: black; padding-left: 16px;">{{ user.first_name }} {{ user.last_name }}:</p>
+                                            <a href="{{ user|check_home_page }}">Личный кабинет</a>
+                                            <a href="{% url 'managementapp:supportcards' %}">Сообщения</a>
+                                            <a href="{% url 'managementapp:logout' %}">Выход</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <a class="button-white-white" style="color: white; font-weight: bold;" href="{% url 'managementapp:login' %}">Войти</a>
+                    {% endif %}                 
+                </div>                
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %} 
+    </main>
+    <footer id="footer">
+        <div class="bootcontainer">
+            <div class="row">
+                <div class="column30">
+                    <div class="row" style="padding-top: 15px;">
+                        <div class="column20">
+                            <img src="{% static 'examapp/css/resources/img/favicon_exam.png' %}" style="width: 3em;">
+                        </div>
+                        <div class="column80">
+                            <a href="https://www.gosnadzor.ru/" style="color: #000; text-decoration: none;" target="_blank">
+                                <p>Роcтехнадзор</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column40">
+                    <div class="row">
+                        <div class="column20" style="padding-top: 15px; margin-right: 20px;">
+                            <img src="{% static 'examapp/css/resources/img/shgi.png' %}" style="width: 5em;">
+                        </div>
+                        <div class="column80" style="padding-top: 7px;">
+                            <a href="https://sdovot.ru/" style="color: #000; text-decoration: none;" target="_blank">
+                                <p>Школа главного инженера</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column30">
+                    <div class="row">
+                        <div class="column20" style="padding-top: 15px;">
+                            <img src="{% static 'examapp/css/resources/img/gov-4.png' %}" style="width: 4em;">
+                        </div>
+                        <div class="column80">
+                            <a href="http://pravo.gov.ru" style="color: #000; text-decoration: none;" target="_blank">
+                                <p>Официальный интернет-портал правовой информации</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </footer>
+</body>
+<script type="text/javascript" src="{% static 'examapp/js/mobilenav.js'%}"></script>
+</html>

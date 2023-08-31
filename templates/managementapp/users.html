@@ -1,0 +1,210 @@
+{% extends 'base manager.html' %}
+{% block title %}Список пользователей{% endblock %}
+{% load static %}
+{% block content %}
+
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li>Пользователи</li>
+                </ul>
+            </div>
+            <div class="column50" style="text-align: right;">
+                <div style="padding-top: 17px;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>
+                    <div id="popup_hd">
+                        <div id="popup_helpdesk"><br>
+                            Контакты технической поддержки<br><br>
+                            Электронная почта: support@sdo-vot.ru<br>
+                            Тел: +7(495) 476-54-88<br><br>
+                            <a href="#" class="close">Закрыть окно</a>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+        </div>
+    </nav>
+</div><br>
+<div class="bootcontainer15">
+    <div class="row">
+        <div class="column25">
+            <div class="box">
+                <p>Доступные подписки: {{ request.user|qty_sum }} шт.</p>
+                <p style="padding-right: 10px;">Использовано подписок в текущем месяце: {{ request.user|qty_month_sum }} шт.</p>
+            </div>
+        </div>
+        <div class="column25">
+        </div>
+        <div class="column25" align="center">
+            <form method="POST" enctype="multipart/form-data" id='formreport'>
+                {% csrf_token %}
+                <div style="text-align: center;">
+                    <p>Отчет использованных подписок</p>
+                    <label for="start">С:</label>
+                    <input type="date" id="start" name="start" value=""><br><br>
+                    <label for="start">По:</label>
+                    <input type="date" id="end" name="end" value=""><br><br>
+                    <button type="submit" name="form_type" value="report" class="button">Скачать</button>
+                </div>
+            </form>
+        </div>
+        <div class="column25" align="center">
+            <form method="POST" enctype="multipart/form-data" id='formimport'>
+                {% csrf_token %}
+                <div>
+                    <input type="file" class="" name="importfile" lang="ru">
+                    <button type="submit" class="button" name="form_type" value="formimport" style="padding-left: 10px; padding-right: 10px;">Загрузить пользователей <i class='fa fa-question-circle' title="Массовая загрузка пользователей автоматизирует процесс внесения данных пользователей. Скачайте шаблон, заполните таблицу по образцу, сохраните файл. Нажмите кнопку 'Выбрать' - выберете сохраненный файл, нажмите кнопку 'Загрузить пользователей'." style='color: white; font-size: 20px;'></i></button>
+                    <a style="margin-right: 6px;" href="/media/import_template.xlsx">Скачать Шаблон Загрузки</a> 
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <form method="POST" enctype="multipart/form-data" id='formexport'>
+        {% csrf_token %}
+        <div style="text-align: right;">
+            <button type="submit" class="button" name="form_type" value="formreportgroup">Скачать отчет по группе пользователей</button>
+        </div>
+        <div>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}<br>
+            <!-- <input class="search" type="text" id="search" placeholder="Поиск ..." style="width: 100%;" > -->
+            <div class="row">
+                <div class="column30">
+                    <div class="row">
+                        <div class="column50">
+                            <input class="search" name="search" style="margin-top: 4px;" type="text" placeholder="Поиск...">
+                        </div>
+                        <div class="column50" style="text-align: center;">
+                            <button type="submit" class="button" name="form_type" value="search_btn">Найти</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="column70">
+                    <div class="row" style="text-align: right;">
+                        <div class="column15">
+
+                        </div>
+                        <div class="column20">
+                            <!-- <a class="button" href="{% url 'managementapp:registration' %}" style="height: 30px; padding-left: 10px; padding-right: 10px;">Доб. пользователя</a> -->
+                            <!-- <input type="button" class="button" style="height: 30px; padding-left: 10px; padding-right: 10px;" onclick="location.href='{% url 'managementapp:registration' %}';" value="Доб. пользователя" /> -->
+                            <button type="button" class="button" name="form_type" value="edituser" style="padding-left: 10px; padding-right: 10px;" onclick="location.href='{% url 'managementapp:registration' %}';">Доб. пользователя</button>
+                        </div>
+                        <div class="column20">
+                            <button type="submit" class="button" name="form_type" value="edituser" style="padding-left: 10px; padding-right: 10px;">Ред. пользователя</button>
+                        </div>
+                        <div class="column20">
+                            <button type="submit" class="button" name="form_type" value="exportuser" style="padding-left: 10px; padding-right: 10px;">Выгрузить пароли <i class='fa fa-question-circle' title="Выберете одного или нескольких пользователей и нажмите кнопку 'Выгрузить пароли', на Ваше устройство будет загружен документ в формате электронной таблицы с данными выбранных пользователей (ФИО, Логин, Пароль, Электронная почта)" style='color: white; font-size: 20px;'></i></button>
+                        </div>
+                        <div class="column20">
+                            <button type="submit" class="button" name="form_type" value="senduser" style="padding-left: 10px; padding-right: 10px;">Отправить пароли <i class='fa fa-question-circle' title="Выберете одного или нескольких пользователей и нажмите кнопку 'Отправить пароли', В результате выбранным пользователям будет направлено приглашение для подготовки в Школе главного инженера, в письме пользователю будут указаны ссылка для перехода в систему подготовки, а также логин и пароль пользователя" style='color: white; font-size: 20px;'></i></button>           
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <table id="table2" class="text-center" align="center" width="100%">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;"><!--<input type="checkbox" name="select-all" id="select-all">--></th>
+                        <th style="text-align: center;">ФИО</th>
+                        <th style="text-align: center;">Логин</th>
+                        <th style="text-align: center;">Пароль</th>
+                        <th style="text-align: center;">Организация</th>
+                        <th style="text-align: center;">Управление Курсами</th>
+                        <th style="text-align: center;">Остановить Обучение</th>                    
+                    </tr>                
+                </thead>
+                <tbody>
+                    {% for obj in object_list %}
+                        <tr>
+                            <td><input type="checkbox" name="checkeduser" value="{{ obj.id }}"></td>
+                            <td>{{ obj.last_name }} {{ obj.first_name }} {{ obj.extendinguserfields.middle_name }}</td>
+                            <td>{{ obj.username }}</td>                        
+                            <td>{{ obj.extendinguserfields.password }}</td>
+                            <td>{{ obj.extendinguserfields.department }}</td>
+                            <td><a href="{% url 'managementapp:usercourses' obj.id %}">перейти</a></td>
+                            <td>
+                                {% if obj.is_active %}
+                                    <label class="switch">
+                                        <a href="{% url 'managementapp:activeuser' obj.id %}">
+                                        <span class="slider-on"></span>
+                                        </a>
+                                    </label>
+                                {% else %}
+                                    <label class="switch">
+                                        <a href="{% url 'managementapp:activeuser' obj.id %}">
+                                        <span class="slider-off"></span>
+                                        </a>
+                                    </label>
+                                {% endif %}
+                            </td>                        
+                        </tr>
+                    {% endfor %}                
+                </tbody>
+            </table>
+            <div style="text-align: center;">                        
+                {% if paginator.count > 10 %}
+                    <div class="pagination">
+                        {% if page_obj.number > 3 %}
+                            <a href="?page=1">1</a>
+                            {% if page_obj.number > 4 %}
+                                <a href="#" style="pointer-events: none; cursor: default;">...</a>
+                            {% endif %}
+                        {% endif %}
+        
+                        {% for p in paginator.page_range %}
+                            {% if page_obj.number == p %}
+                                <a href="?page={{ p }}" class="active">{{ p }}</a>
+                            {% elif p > page_obj.number|add:'-3' and p < page_obj.number|add:'3' %}
+                                {% if p in checked_page %}
+                                    <a style="color: black; background-color: #E7E6E7;" href="?page={{ p }}">{{ p }}</a>
+                                {% else %}
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+        
+                        {% if page_obj.number < paginator.num_pages|add:'-3' %}
+                            <a href="#" style="pointer-events: none; cursor: default;">...</a>
+                            {% if paginator.num_pages in checked_page %}
+                                <a style="color: black; background-color: #E7E6E7;" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                            {% else %}
+                                <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                            {% endif %}
+                        {% elif page_obj.number < paginator.num_pages|add:'-2' %}
+                            {% if paginator.num_pages in checked_page %}
+                                <a style="color: black; background-color: #E7E6E7;" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                            {% else %}
+                                <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="pagination">
+                        {% for p in paginator.page_range %}
+                            {% if page_obj.number == p %}
+                                <a href="?page={{ p }}" class="active">{{ p }}</a>
+                            {% else %}
+                                <a href="?page={{ p }}">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div><br><br><br><br><br><br>
+
+{% endblock %}

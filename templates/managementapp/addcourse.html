@@ -1,0 +1,103 @@
+{% extends 'base manager.html' %}
+{% load static %}
+{% block title %}Создать пользователя{% endblock %}
+ 
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="{% url 'managementapp:users' %}">Пользователи</a></li>
+                    <li><a href="{% url 'managementapp:usercourses' user_id %}">Курсы</a></li>
+                    <li>Запись на курсы</li>
+                </ul>
+            </div>
+            <div class="column50" style="text-align: right;">
+                <div style="padding-top: 17px;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>
+                    <div id="popup_hd">
+                        <div id="popup_helpdesk"><br>
+                            Контакты технической поддержки<br><br>
+                            Электронная почта: support@sdo-vot.ru<br>
+                            Тел: +7(495) 476-54-88<br><br>
+                            <a href="#" class="close">Закрыть окно</a>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</div>
+<br>
+<div class="examtest" style="min-height: 440px; max-width: 900px;;">
+    <form method="post" class="multipart/form-data">
+        {% csrf_token %}
+        <h2 style="text-align: center;">Записать на курс</h2><hr>
+        <div style="text-align: center;">
+            <div class="row">
+                <div class="column40" style="text-align: left; padding-left: 25%;">
+                    <p>Область:</p>
+                </div>
+                <div class="column60" style="text-align: left;">
+                    <select id="selectdisplay" class="selectdisplay combo-a minimal" data-nextcombo=".combo-b" style="width: 70%;">
+                        <option value="0" selected disabled></option>
+                        {% for obj in course_types %}
+                            {% if obj.name == 'Эксперты' %}
+                                <option value="{{ obj.name }}" data-id="{{ obj.id }}" data-option="-1">{{ obj.name }}</option>
+                            {% else %}
+                                <option value="{{ obj.id }}" data-id="{{ obj.id }}" data-option="-1">{{ obj.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column40" style="text-align: left; padding-left: 25%;">
+                    <p>Курс:</p>
+                </div>
+                <div class="column60" style="text-align: left;">
+                    <select name="courseid" class="combo-b minimal" data-nextcombo=".combo-c" style="width: 70%;" disabled>
+                        {% for obj in object_list %}
+                            <option value="{{ obj.id }}" data-id="{{ obj.id }}" data-option="{{ obj.course_type.id }}">{{ obj.name }}</option>
+                        {% endfor %}
+                    </select>                
+                </div>        
+            </div>
+            <div  class="row">
+                <div id="elbezrole1" class="column40" style="text-align: left; padding-left: 25%;">
+                    <p>Категория по напряжению:</p>
+                </div>
+                <div id="elbezrole2" class="column60" style="text-align: left;">
+                    <select name="categoryid" class="combo-c minimal" data-nextcombo=".combo-d" style="width: 70%;" disabled>
+                        {% for obj in parent_course %}
+                            <option value="{{ obj.id }}" data-id="{{ obj.id }}" data-option="{{ obj.parent.id }}">{{ obj.name|split_parent_course:obj.parent.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>        
+            </div><br>
+            <!-- <div id="votcheck" style="display: none;" class="custom-control custom-checkbox mb-4">
+                <input type="checkbox" class="custom-control-input" name="enrolattempt" id="defaultContactFormCopy">
+                <label class="custom-control-label" for="defaultContactFormCopy">Вопрос-Ответ</label>
+            </div> -->
+            <div id="zadachicheck" style="display: none;" class="custom-control custom-checkbox mb-4">
+                <input type="checkbox" class="custom-control-input" name="zadachi" id="defaultContactFormCopy">
+                <label class="custom-control-label" for="defaultContactFormCopy">Задачи</label>
+            </div>
+        </div><br><br><br><br>
+        <hr>
+        <div style="text-align: center;">
+            <button type="submit" class="button-white" style="width: 30%;">Записать</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="{% static 'managementapp/js/addcourse.js'%}"></script>
+<script type="text/javascript" src="{% static 'managementapp/js/selecthide2.js'%}"></script>
+
+{% endblock %}

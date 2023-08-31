@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="/media/icon.ico">
+    <link rel="stylesheet" type="text/css" href="{% static 'examapp/css/style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <script src='https://www.google.com/recaptcha/api.js?render=6LfkYW0eAAAAAExou1PUJwUC6XT7nv1ecjk_x-hl'></script>
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div class="bootcontainer header">
+            <div class="row" style="padding-top: 30px;">
+                <div class="column60">
+                    <a href="" style="color: #fff; text-decoration: none;">
+                        <h3 style="margin: 0px 0 0 15px;">Единый портал тренинга</h3>
+                    </a>
+                </div>
+                <div class="column40" style="margin: 0px 15px 0 0px; text-align: right;">
+                    {% if request.user.is_authenticated %}
+                        <a style="color: white;" href="">{{ user.first_name }} {{ user.last_name }}</a> | <a style="color: white;" href="">Выйти</a>
+                    {% else %}
+                        <a style="color: white;" href="">Регистрация</a> | <a style="color: white;" href="">Войти</a>
+                    {% endif %}                 
+                </div>                
+            </div>
+        </div>
+        <div class="header2">
+            <div class="bootcontainer" style="padding-top: 25px;">
+                <a href="" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 17px; margin-top: 0px; margin-bottom: 0px;">О портале</p>
+                </a>
+                <a href="" style="color: #000; text-decoration: none;">
+                    <p style="display: inline; padding-left: 15px; margin-top: 0px; margin-bottom: 0px;">Бланки заявлений</p>
+                </a>
+            </div>
+        </div>
+    </header>
+    <main style="margin-bottom: 10%">
+        <div>
+        {% block content %}{% endblock %} 
+        </div>
+    </main>
+    <footer id="footer">
+        <div class="bootcontainer">
+            <div class="row">
+                <div class="column25">
+                    <div class="row" style="padding-top: 15px;">
+                        <div class="column30">
+                            <img src="{% static 'examapp/css/resources/img/favicon_exam.png' %}" style="width: 3em;">
+                        </div>
+                        <div class="column70">
+                            <a href="https://www.gosnadzor.ru" style="color: #000; text-decoration: none;">
+                                <p>Роcтехнадзор</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column25">
+                    <div class="row">
+                        <div class="column30" style="padding-top: 15px; margin-right: 20px;">
+                            <img src="{% static 'examapp/css/resources/img/shgi.png' %}" style="width: 5em;">
+                        </div>
+                        <div class="column70" style="padding-top: 7px;">
+                            <a href="https://sdovot.ru/" style="color: #000; text-decoration: none;">
+                                <p>Школа главного инженера</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column25">
+                    <div class="row">
+                        <div class="column30" style="padding-top: 15px;">
+                            <img src="{% static 'examapp/css/resources/img/mintrud_logo.jpg' %}" style="width: 3em;">
+                        </div>
+                        <div class="column70" style="padding-top: 7px;">
+                            <a href="https://mintrud.gov.ru" style="color: #000; text-decoration: none;">
+                                <p>Министерство труда и социальной защиты</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column25">
+                    <div class="row">
+                        <div class="column30" style="padding-top: 15px;">
+                            <img src="{% static 'examapp/css/resources/img/gov-4.png' %}" style="width: 4em;">
+                        </div>
+                        <div class="column70">
+                            <a href="http://pravo.gov.ru" style="color: #000; text-decoration: none;">
+                                <p>Официальный интернет-портал правовой информации</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </footer>
+</body>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]function(){(m[i].a=m[i].a[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ 
+    ym(90650371, "init", {
+         clickmap:true,
+         trackLinks:true,
+         accurateTrackBounce:true,
+         webvisor:true
+    });
+ </script>
+ <noscript><div><img src="https://mc.yandex.ru/watch/90650371" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+ <!-- /Yandex.Metrika counter -->
+</html>

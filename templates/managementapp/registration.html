@@ -1,0 +1,67 @@
+{% extends 'base manager.html' %}
+{% load static %}
+{% block title %}Создать пользователя{% endblock %}
+ 
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="{% url 'managementapp:users' %}">Пользователи</a></li>
+                    <li>Создать пользователя</li>
+                </ul>
+            </div>
+            <div class="column50" style="text-align: right;">
+                <div style="padding-top: 17px;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>
+                    <div id="popup_hd">
+                        <div id="popup_helpdesk"><br>
+                            Контакты технической поддержки<br><br>
+                            Электронная почта: support@sdo-vot.ru<br>
+                            Тел: +7(495) 476-54-88<br><br>
+                            <a href="#" class="close">Закрыть окно</a>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</div>
+<br>
+<div class="examtest" style="min-height: 440px;">
+    <form method="post" class="multipart/form-data">
+        {% csrf_token %}
+        <h2 style="text-align: center;">Создать пользователя</h2><hr>
+        <div class="row">
+            <div class="column40">
+                <img src="{% static 'examapp/css/loginIcon.png' %}" style="margin-left: 10%; margin-top: 4%; width: 75%;">
+            </div>
+            <div class="column60">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div style="text-align: center;">
+                    <input class="input-white" type="text" placeholder="Введите Имя*" name="firstname" id="firstname" required onkeypress="return event.charCode != 32"><br><br>
+                    <input class="input-white" type="text" placeholder="Введите Фамилию*" name="lastname" id="lastname" required onkeypress="return event.charCode != 32"><br><br>
+                    <input class="input-white" type="text" placeholder="Введите Отчество" name="middlename" id="middlename"><br><br>
+                    <input class="input-white" type="text" placeholder="Введите Организацию*" name="department" id="department" required><br><br>
+                    <input class="input-white" type="text" placeholder="Введите Почту*" name="email" id="email" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*"><br><br><hr>
+                    <button type="submit" class="button-white">Создать</button>
+                </div>
+                
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

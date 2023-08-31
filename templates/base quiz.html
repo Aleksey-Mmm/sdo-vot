@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="/media/icon.ico">
+    <link rel="stylesheet" type="text/css" href="{% static 'examapp/css/style.css' %}">
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <main>
+        <div>
+        {% block content %}{% endblock %}    
+        </div>
+    </main>
+</body>
+</html>

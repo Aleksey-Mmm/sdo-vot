@@ -1,0 +1,119 @@
+{% extends 'base learning.html' %}
+{% block title %}Отчета{% endblock %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div id="hide-des-div" class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="{% url 'learningapp:courselist' %}">Курсы</a></li>
+                    <li><a href="{% url 'learningapp:selectcourse' course_slug %}">Курс</a></li>
+                    <li><a href="{% url 'learningapp:quizattempts' course_slug %}">Попытки</a></li>
+                    <li>Отчет</li>
+                </ul>
+            </div>
+            <div class="column50" style="margin-left: auto; margin-right: 0px;">
+                <div style="padding-top: 17px; text-align:  right;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>
+                    {% if template == 'shgi' %}
+                        <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">
+                            <p style="display: inline; padding-left: 15px;">Инструкция</p>
+                        </a>
+                    {% endif %}                 
+                </div>
+            </div>
+        </div>
+        <div id="hide-mob-div" class="topnav">
+            <ul>
+                <li><a href="{% url 'learningapp:selectcourse' course_slug %}">Курс</a></li>
+                <li><a href="{% url 'learningapp:quizattempts' course_slug %}">Попытки</a></li>
+                <li>Отчет</li>
+            </ul>
+            <div id="myLinks">
+                <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">О портале</a>
+                <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">Техническая поддержка</a>
+                {% if template == 'shgi' %}
+                    <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Инструкция</p>
+                    </a>
+                {% endif %} 
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+            </a>
+        </div> 
+    </nav>
+
+</div>
+<div id="margin-top-15" class="examtest" style="min-height: 440px; margin-bottom: 150px;">
+    <table border="1" class="mob-att-table-rep">
+        <tr>
+            <th style="width: 1rem;">
+                {% if not 'expert' in template %}
+                    <img src="{% static 'managementapp/css/шгич.png' %}" style="max-width: 13em;">
+                {% else %}
+                    <img src="{% static 'managementapp/css/expert-clear.png' %}" style="max-width: 4em;">
+                {% endif %}
+            </th>
+            <th>
+                Область: {{ object.quiz.course.full_name }}<br>
+                Организация: {{ extend_user.department }}<br>
+                ФИО: {{ object.user.last_name }} {{ object.user.first_name }} {{ extend_user.middle_name }}
+            </th>
+            <th>
+                Дата: {{ object.timefinish }}<br>
+                Итоговая оценка: 
+                    {% if object|percent_result >= 90 %}
+                        Cдан
+                    {% else %}
+                        Не сдан
+                    {% endif %}
+                <br>
+                ({{ object.grade|floatformat }} из {{ object|report_max_grade }})
+            </th>
+        </tr>        
+    </table>
+    <table border="1" class="mob-att-table-rep">
+        <tr>
+        <th>№</th>
+        <th>Вопрос</th>
+        <th>Выбранный ответ</th>
+        <th>Правильный ответ</th>
+        </tr>
+        {% for q in attempt_questions %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ q.text }}</td>
+                <td>
+                    {% for a in q.id|attempt_answers:object.id %}
+                        <!-- {% if not forloop.first and forloop.last %}
+                            {{ forloop.counter }}
+                        {% endif %} -->
+                        {% if a.weight != 0 %}
+                            <label style="color: rgb(14, 202, 14);"> {{ a.text }}</label><br><br>
+                        {% else %}
+                            <label style="color: red;"> {{ a.text }}</label><br><br>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in q.answer_set.all %}
+                        {% if a.weight != 0 %}
+                            <label> {{ a.text }}</label><br><br>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+</div>
+
+{% endblock %}

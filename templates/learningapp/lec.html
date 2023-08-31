@@ -1,0 +1,68 @@
+{% extends 'base learning.html' %}
+{% block title %}Обучение{% endblock %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #E2EBF6;">
+    <nav class="bootcontainer">
+        <div id="hide-des-div" class="row">
+            <div class="column50">
+                <ul class="breadcrumb" style="margin-top: 0; margin-bottom: 0; background: #E2EBF6;">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="{% url 'learningapp:courselist' %}">Курсы</a></li>
+                    <li><a href="{% url 'learningapp:selectcourse' course_slug %}">Курс</a></li>
+                    <li>Лекции</li>
+                </ul>
+            </div>
+            <div class="column50" style="margin-left: auto; margin-right: 0px;">
+                <div style="padding-top: 17px; text-align:  right;">
+                    <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 17px;">О портале</p>
+                    </a>
+                    <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Техническая поддержка</p>
+                    </a>
+                    <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">
+                        <p style="display: inline; padding-left: 15px;">Инструкция</p>
+                    </a>                
+                </div>
+            </div>
+        </div>
+        <div id="hide-mob-div" class="topnav">
+            <ul>
+                <li><a href="{% url 'learningapp:courselist' %}">Курсы</a></li>
+                <li><a href="{% url 'learningapp:selectcourse' course_slug %}">Курс</a></li>
+                <li>Лекции</li>
+            </ul>
+            <div id="myLinks">
+                <a href="{% url 'managementapp:about' %}" style="color: #000; text-decoration: none;">О портале</a>
+                <a href="{% url 'managementapp:support' %}" style="color: #000; text-decoration: none;">Техническая поддержка</a>
+                <a href="/media/Инструкция Пользователя.pdf" style="color: #000; text-decoration: none;">Инструкция</a> 
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+            </a>
+        </div> 
+    </nav>
+
+</div>
+<div id="popup_hd">
+    <div id="popup_helpdesk"><br>
+        Контакты технической поддержки<br><br>
+        Электронная почта: support@sdo-vot.ru<br>
+        Тел: +7(495) 476-54-88<br><br>
+        <a href="#" class="close">Закрыть окно</a>
+    </div>
+</div>
+<div id="margin-top-15" class="examtest"  style="min-height: 440px; margin-bottom: 150px;">
+    {% for obj in object_list %}
+        <button class="accordion">{{ obj }}</button>
+        <div class="panel">
+            <embed id="hide-des-div" src="https://{{ request.get_host }}{{ obj.document }}#toolbar=0" type="application/pdf" height="1400px" width="100%"><br>
+            <a id="hide-mob-div" href="{{ obj.document }}">{{ obj }}</a><br>
+        </div><br>
+    {% endfor %}
+</div>
+
+<script src="{% static 'examapp/js/accordion.js' %}"></script>
+{% endblock %}

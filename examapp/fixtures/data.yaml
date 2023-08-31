@@ -1,0 +1,71 @@
+- model: examapp.status
+  pk: 1
+  fields:
+    name: Утвержден
+- model: examapp.status
+  pk: 2
+  fields:
+    name: В процессе
+- model: examapp.status
+  pk: 3
+  fields:
+    name: Завершен
+- model: examapp.status
+  pk: 4
+  fields:
+    name: Отключен
+- model: examapp.questiontype
+  pk: 1
+  fields:
+    name: Один ответ
+- model: examapp.questiontype
+  pk: 2
+  fields:
+    name: Множественный ответ
+- model: examapp.coursetype
+  pk: 1
+  fields:
+    name: Промышленная безопасность
+    slug: prombez
+- model: examapp.coursetype
+  pk: 2
+  fields:
+    name: Электробезопасность
+    slug: elbez
+- model: examapp.coursetype
+  pk: 3
+  fields:
+    name: Эксперты
+    slug: experts
+- model: examapp.tag
+  pk: 1
+  fields:
+    name: до 1000 II
+- model: examapp.tag
+  pk: 2
+  fields:
+    name: до 1000 III
+- model: examapp.tag
+  pk: 3
+  fields:
+    name: до 1000 IV
+- model: examapp.tag
+  pk: 4
+  fields:
+    name: до 1000 V
+- model: examapp.tag
+  pk: 5
+  fields:
+    name: до и выше 1000 II
+- model: examapp.tag
+  pk: 6
+  fields:
+    name: до и выше 1000 III
+- model: examapp.tag
+  pk: 7
+  fields:
+    name: до и выше 1000 IV
+- model: examapp.tag
+  pk: 8
+  fields:
+    name: до и выше 1000 V
