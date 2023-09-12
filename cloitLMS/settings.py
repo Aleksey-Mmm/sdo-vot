@@ -76,7 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cloitLMS.wsgi.application'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
 EMAIL_HOST = 'smtp.msndr.net'
 EMAIL_HOST_USER = 'alexey.omich@yandex.ru'
 EMAIL_HOST_PASSWORD = 'd0d9dc221ec6dba2f7dd8cad8f2c2d63'
