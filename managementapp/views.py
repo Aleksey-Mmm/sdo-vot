@@ -50,7 +50,7 @@ def user_message(login, password, first_name, middle_name, path):
         'Инструкция пользователя доступна по ссылке: https://' + path + '/media/Инструкция%20обучающегося.pdf\n' +
         'В случае если у Вас возникнут вопросы - Вы можете обратиться в техническую поддержку:\n' +
         '- Email: support@sdo-vot.ru\n' +
-        '- Tel: +7(495) 476-54-88 ( с 06:00 по 23:00 по Московскому времени)\n' +
+        '- Tel: +7(495) 320-88-07 ( с 06:00 по 23:00 по Московскому времени)\n' +
 
         'Обращаем Ваше внимание, что логин и пароль вы можете скопировать из данного письма и вставить в окне авторизации.'
         )
@@ -913,10 +913,6 @@ class BestReport(CheckManagerPermissions, DetailView):
         context['attempt_questions'] = Question.objects.filter(
             pk__in = LearningQuizAttemptGrade.objects.filter(quiz_attempt = self.get_object()).values('question')
             )
-        if settings.SITE_TYPE == 'shgi':
-            context['template'] = 'base manager.html'
-        elif settings.SITE_TYPE == 'expert':
-            context['template'] = 'base manager-expert.html'
         
         return context
 
