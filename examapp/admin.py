@@ -136,8 +136,8 @@ class UserRegisteredQuizAdmin(admin.ModelAdmin):
 
 class ExtendingUserFieldsAdmin(admin.ModelAdmin):
     list_display = ('user', 'middle_name', 'department', 'password')
-    list_filter = ['user', 'department']
-    search_fields = ['user', 'department']
+    list_filter = ['department']
+    search_fields = ['user__username']
 
 class UploadAdmin(admin.ModelAdmin):
     list_display = ('description', 'document', 'upload_time', 'course', 'status')
